@@ -30,13 +30,6 @@ The system takes a short reference audio sample and generates synthetic speech s
 - **Advantages**: High-quality voice cloning, good prosody
 - **Use case**: High-fidelity voice synthesis
 
-### 3. Tortoise TTS
-
-- **Type**: Autoregressive transformer model
-- **Architecture**: GPT-based text-to-speech
-- **Advantages**: Very natural-sounding output
-- **Use case**: Quality over speed (slower inference)
-
 ## Project Structure
 
 ```
@@ -86,14 +79,12 @@ practica3_tts/
 │   │   └── voice_sample.wav
 │   └── generated/              # Generated audio outputs
 │       ├── coqui/
-│       ├── gpt_sovits/
-│       └── tortoise/
+│       └── gpt_sovits/
 │
 ├── models/                     # Model wrapper implementations
 │   ├── __init__.py
 │   ├── coqui_model.py         # Coqui TTS wrapper
-│   ├── gpt_sovits_model.py    # GPT-SoVITS wrapper
-│   └── tortoise_model.py      # Tortoise TTS wrapper
+│   └── gpt_sovits_model.py    # GPT-SoVITS wrapper
 │
 ├── evaluation/                 # Evaluation notebooks and scripts
 │   └── evaluation.ipynb       # Metrics calculation and analysis
@@ -152,12 +143,6 @@ Generate audio with GPT-SoVITS:
 make run-gptsovits TEXT="Hello, this is a test of voice cloning"
 ```
 
-Generate audio with Tortoise TTS:
-
-```bash
-make run-tortoise TEXT="Hello, this is a test of voice cloning"
-```
-
 Run all models at once:
 
 ```bash
@@ -179,7 +164,6 @@ Then navigate to `evaluation/evaluation.ipynb` in your browser.
 - `make build` - Build Docker image
 - `make run-coqui` - Run Coqui TTS model
 - `make run-gptsovits` - Run GPT-SoVITS model
-- `make run-tortoise` - Run Tortoise TTS model
 - `make run-all` - Run all models sequentially
 - `make jupyter` - Start Jupyter notebook server for evaluation
 - `make shell` - Open interactive shell in container
@@ -273,7 +257,6 @@ This project is for academic purposes only. Model licenses:
 
 - **Coqui TTS**: Mozilla Public License 2.0
 - **GPT-SoVITS**: MIT License
-- **Tortoise TTS**: Apache License 2.0
 
 Reference audio licensed under CC0 (Public Domain) by buggly via Freesound.org.
 
@@ -287,7 +270,6 @@ Practice 3: Zero-Shot Voice Cloning
 
 - Coqui TTS community for the open-source TTS framework
 - GPT-SoVITS developers for the voice cloning implementation
-- Tortoise TTS team for the high-quality TTS model
 - buggly (Freesound.org) for providing the reference audio under CC0 license
 
 ---
@@ -327,12 +309,6 @@ Generate audio with GPT-SoVITS:
 make run-gptsovits TEXT="Hello, this is a test of voice cloning"
 ```
 
-Generate audio with Tortoise TTS:
-
-```bash
-make run-tortoise TEXT="Hello, this is a test of voice cloning"
-```
-
 Run all models at once:
 
 ```bash
@@ -354,7 +330,6 @@ Then navigate to `evaluation/evaluation.ipynb` in your browser.
 - `make build` - Build Docker image
 - `make run-coqui` - Run Coqui TTS model
 - `make run-gptsovits` - Run GPT-SoVITS model
-- `make run-tortoise` - Run Tortoise TTS model
 - `make run-all` - Run all models sequentially
 - `make jupyter` - Start Jupyter notebook server for evaluation
 - `make shell` - Open interactive shell in container
@@ -448,7 +423,6 @@ This project is for academic purposes only. Model licenses:
 
 - **Coqui TTS**: Mozilla Public License 2.0
 - **GPT-SoVITS**: MIT License
-- **Tortoise TTS**: Apache License 2.0
 
 Reference audio licensed under CC0 (Public Domain) by buggly via Freesound.org.
 
@@ -462,7 +436,6 @@ Practice Zero-Shot Voice Cloning
 
 - Coqui TTS community for the open-source TTS framework
 - GPT-SoVITS developers for the voice cloning implementation
-- Tortoise TTS team for the high-quality TTS model
 - buggly (Freesound.org) for providing the reference audio under CC0 license
 
 ---

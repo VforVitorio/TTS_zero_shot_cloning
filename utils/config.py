@@ -14,7 +14,6 @@ REFERENCE_DIR = DATA_DIR / "reference"
 GENERATED_DIR = DATA_DIR / "generated"
 GENERATED_COQUI_DIR = GENERATED_DIR / "coqui"
 GENERATED_GPT_SOVITS_DIR = GENERATED_DIR / "gpt_sovits"
-GENERATED_TORTOISE_DIR = GENERATED_DIR / "tortoise"
 
 # Results directories
 RESULTS_DIR = PROJECT_ROOT / "results"
@@ -27,7 +26,6 @@ AUDIO_FORMAT = "wav"
 
 # Model configurations
 COQUI_MODEL_NAME = "tts_models/multilingual/multi-dataset/your_tts"
-TORTOISE_PRESET = "fast"  # Options: 'ultra_fast', 'fast', 'standard', 'high_quality'
 
 
 def ensure_directories():
@@ -36,7 +34,6 @@ def ensure_directories():
         REFERENCE_DIR,
         GENERATED_COQUI_DIR,
         GENERATED_GPT_SOVITS_DIR,
-        GENERATED_TORTOISE_DIR,
         AUDIO_SAMPLES_DIR
     ]
     for directory in directories:
