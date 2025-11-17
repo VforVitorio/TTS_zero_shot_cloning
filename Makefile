@@ -15,12 +15,6 @@ run-gptsovits:
 		-w /opt/project \
 		$(IMAGE) python scripts/generate_gptsovits.py
 
-run-tortoise:
-	docker run --rm \
-		-v "$(PWD):/opt/project" \
-		-w /opt/project \
-		$(IMAGE) python scripts/generate_tortoise.py
-
 run-all:
 	docker run --rm \
 		-v "$(PWD):/opt/project" \

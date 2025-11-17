@@ -63,12 +63,6 @@ The system takes a short reference audio sample and generates synthetic speech s
 - **Advantages**: High-quality voice cloning, good prosody
 - **Use case**: High-fidelity voice synthesis
 
-### 3. Tortoise TTS
-- **Type**: Autoregressive transformer model
-- **Architecture**: GPT-based text-to-speech
-- **Advantages**: Very natural-sounding output
-- **Use case**: Quality over speed (slower inference)
-
 ## Project Structure
 ```
 
