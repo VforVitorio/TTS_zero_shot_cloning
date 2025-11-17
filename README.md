@@ -187,17 +187,61 @@ Then navigate to `evaluation/evaluation.ipynb` in your browser.
 
 ## Evaluation Metrics
 
-### Objective Metrics
+Este proyecto evalúa los modelos TTS usando 3 métricas objetivas principales:
 
-- **Speaker Similarity**: Cosine similarity between speaker embeddings using pre-trained models
-- **Audio Quality**: Signal-to-noise ratio, spectral analysis
-- **Inference Time**: Generation latency per second of audio
+### 1. Speaker Similarity (Similitud del Hablante) ⭐ PRINCIPAL
 
-### Subjective Assessment
+Mide qué tan similar suena la voz generada respecto a la voz de referencia.
 
-- **Naturalness**: How natural and human-like the voice sounds
-- **Voice Similarity**: How closely it matches the reference voice
-- **Prosody**: Intonation, rhythm, and stress patterns
+**Herramientas:**
+- **Resemblyzer**: Extrae embeddings de voz usando GE2E (Generalized End-to-End)
+- **SpeechBrain ECAPA-TDNN**: Speaker verification embeddings de alta precisión
+
+**Métrica:** Cosine similarity entre embeddings del audio de referencia vs audio generado
+
+**Rango:** 0-1 (más cercano a 1 = mayor similitud de voz)
+
+**Interpretación:**
+- `>0.8`: Excelente similitud
+- `0.6-0.8`: Buena similitud
+- `<0.6`: Similitud pobre
+
+### 2. Audio Quality (Calidad de Audio)
+
+Evalúa la calidad perceptual y técnica del audio generado.
+
+**Herramientas:**
+- **PESQ** (Perceptual Evaluation of Speech Quality): Calidad perceptual de voz
+- **STOI** (Short-Time Objective Intelligibility): Inteligibilidad del habla
+
+**Rango PESQ:** -0.5 a 4.5 (más alto = mejor calidad)
+**Rango STOI:** 0-1 (más alto = mayor inteligibilidad)
+
+**Métricas adicionales:**
+- Signal-to-Noise Ratio (SNR)
+- Análisis espectral
+
+### 3. Inference Time (Tiempo de Inferencia)
+
+Mide la velocidad de generación del modelo.
+
+**Métrica:** Tiempo de generación por segundo de audio (RTF - Real-Time Factor)
+
+**Cálculo:** `RTF = tiempo_generación / duración_audio`
+
+**Interpretación:**
+- `RTF < 1`: Más rápido que tiempo real (ideal)
+- `RTF = 1`: Tiempo real
+- `RTF > 1`: Más lento que tiempo real
+
+**Ejemplo:** RTF = 0.5 significa que genera 1 segundo de audio en 0.5 segundos
+
+---
+
+### Evaluación Subjetiva (Opcional)
+
+- **MOS** (Mean Opinion Score): Evaluación humana de naturalidad (escala 1-5)
+- **Prosody**: Entonación, ritmo y patrones de énfasis
 
 ## Reference Audio
 
@@ -318,17 +362,61 @@ Then navigate to `evaluation/evaluation.ipynb` in your browser.
 
 ## Evaluation Metrics
 
-### Objective Metrics
+Este proyecto evalúa los modelos TTS usando 3 métricas objetivas principales:
 
-- **Speaker Similarity**: Cosine similarity between speaker embeddings using pre-trained models
-- **Audio Quality**: Signal-to-noise ratio, spectral analysis
-- **Inference Time**: Generation latency per second of audio
+### 1. Speaker Similarity (Similitud del Hablante) ⭐ PRINCIPAL
 
-### Subjective Assessment
+Mide qué tan similar suena la voz generada respecto a la voz de referencia.
 
-- **Naturalness**: How natural and human-like the voice sounds
-- **Voice Similarity**: How closely it matches the reference voice
-- **Prosody**: Intonation, rhythm, and stress patterns
+**Herramientas:**
+- **Resemblyzer**: Extrae embeddings de voz usando GE2E (Generalized End-to-End)
+- **SpeechBrain ECAPA-TDNN**: Speaker verification embeddings de alta precisión
+
+**Métrica:** Cosine similarity entre embeddings del audio de referencia vs audio generado
+
+**Rango:** 0-1 (más cercano a 1 = mayor similitud de voz)
+
+**Interpretación:**
+- `>0.8`: Excelente similitud
+- `0.6-0.8`: Buena similitud
+- `<0.6`: Similitud pobre
+
+### 2. Audio Quality (Calidad de Audio)
+
+Evalúa la calidad perceptual y técnica del audio generado.
+
+**Herramientas:**
+- **PESQ** (Perceptual Evaluation of Speech Quality): Calidad perceptual de voz
+- **STOI** (Short-Time Objective Intelligibility): Inteligibilidad del habla
+
+**Rango PESQ:** -0.5 a 4.5 (más alto = mejor calidad)
+**Rango STOI:** 0-1 (más alto = mayor inteligibilidad)
+
+**Métricas adicionales:**
+- Signal-to-Noise Ratio (SNR)
+- Análisis espectral
+
+### 3. Inference Time (Tiempo de Inferencia)
+
+Mide la velocidad de generación del modelo.
+
+**Métrica:** Tiempo de generación por segundo de audio (RTF - Real-Time Factor)
+
+**Cálculo:** `RTF = tiempo_generación / duración_audio`
+
+**Interpretación:**
+- `RTF < 1`: Más rápido que tiempo real (ideal)
+- `RTF = 1`: Tiempo real
+- `RTF > 1`: Más lento que tiempo real
+
+**Ejemplo:** RTF = 0.5 significa que genera 1 segundo de audio en 0.5 segundos
+
+---
+
+### Evaluación Subjetiva (Opcional)
+
+- **MOS** (Mean Opinion Score): Evaluación humana de naturalidad (escala 1-5)
+- **Prosody**: Entonación, ritmo y patrones de énfasis
 
 ## Reference Audio
 
