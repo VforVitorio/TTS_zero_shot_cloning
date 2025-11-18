@@ -340,6 +340,44 @@ def main():
     # Display comparison
     display_comparison(results)
 
+    # Save results to JSON file
+    save_results_to_json(results, args.text, reference_audio_path)
+
+
+def save_results_to_json(results: list, text: str, reference_audio_path: Path):
+    """
+    Save results to JSON file for later analysis.
+
+    Args:
+        results: List of result dictionaries from each model
+        text: Text that was synthesized
+        reference_audio_path: Path to reference audio used
+    """
+    import json
+    import datetime
+
+    # Create results directory if it doesn't exist
+    results_dir = Path(__file__).parent.parent / "results"
+    results_dir.mkdir(parents=True, exist_ok=True)
+
+    # Prepare output data
+    output_data = {
+        "timestamp": datetime.datetime.now().isoformat(),
+        "text": text,
+        "reference_audio": str(reference_audio_path),
+        "models": results
+    }
+
+    # Generate filename with timestamp
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_file = results_dir / f"metrics_{timestamp}.json"
+
+    # Save to JSON
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(output_data, f, indent=2, ensure_ascii=False)
+
+    print(f"\n✓ Results saved to: {output_file}")
+
 
 if __name__ == "__main__":
     main()
