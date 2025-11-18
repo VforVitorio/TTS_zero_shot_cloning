@@ -5,18 +5,21 @@ build:
 
 run-coqui:
 	docker run --rm \
+		-e TEXT \
 		-v "$(PWD):/opt/project" \
 		-w /opt/project \
 		$(IMAGE) python scripts/generate_coqui.py
 
 run-gptsovits:
 	docker run --rm \
+		-e TEXT \
 		-v "$(PWD):/opt/project" \
 		-w /opt/project \
 		$(IMAGE) python scripts/generate_gptsovits.py
 
 run-all:
 	docker run --rm \
+		-e TEXT \
 		-v "$(PWD):/opt/project" \
 		-w /opt/project \
 		$(IMAGE) python scripts/run_all.py
