@@ -17,12 +17,40 @@ from utils import (
 
 
 class XTTS:
-    """Wrapper for XTTS v2 model with voice cloning capabilities."""
+    """
+    Wrapper for XTTS v2 model with voice cloning capabilities.
+
+    IMPORTANT: XTTS v2 requires accepting Coqui's CPML license.
+    This is automatically handled by setting the COQUI_TOS_AGREED environment variable.
+
+    License Information:
+    - Commercial use requires purchasing a license from Coqui (licensing@coqui.ai)
+    - Non-commercial use is covered by CPML: https://coqui.ai/cpml
+    - This implementation accepts the non-commercial license terms automatically
+    """
 
     def __init__(self):
-        """Initialize and load XTTS v2 model."""
+        """
+        Initialize and load XTTS v2 model.
+
+        The COQUI_TOS_AGREED environment variable is set to automatically accept
+        the non-commercial CPML license terms. This is necessary because XTTS v2
+        requires interactive license acceptance, which doesn't work in Docker
+        containers without TTY.
+
+        If you need commercial use, purchase a license from licensing@coqui.ai
+        """
+        import os
+
+        # Accept Coqui's non-commercial license terms automatically
+        # Required to avoid "EOF when reading a line" error in Docker
+        os.environ['COQUI_TOS_AGREED'] = '1'
+
         print(f"Loading XTTS v2 model: {XTTS_MODEL_NAME}")
-        self.model = TTS(XTTS_MODEL_NAME)
+        print("Accepting Coqui CPML non-commercial license terms...")
+
+        # Initialize with gpu=False for CPU-only inference
+        self.model = TTS(XTTS_MODEL_NAME, progress_bar=False, gpu=False)
         self.sample_rate = SAMPLE_RATE
         print("XTTS v2 model loaded successfully")
 

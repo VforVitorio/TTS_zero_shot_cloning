@@ -8,8 +8,11 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     ffmpeg \
     libsndfile1 \
+    espeak-ng \
     git \
     && rm -rf /var/lib/apt/lists/*
+
+# espeak-ng is required for VITS model phonemization
 
 COPY requirements.txt /opt/requirements.txt
 
