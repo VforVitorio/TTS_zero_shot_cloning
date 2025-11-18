@@ -3,29 +3,41 @@ IMAGE := tts-voice-cloning
 build:
 	docker build -t $(IMAGE) .
 
-run-coqui:
+run-yourtts:
 	docker run --rm \
 		-e TEXT \
+		-e PYTHONPATH=/opt/project \
 		-v "$(PWD):/opt/project" \
 		-w /opt/project \
-		$(IMAGE) python scripts/generate_coqui.py
+		$(IMAGE) python scripts/generate_yourtts.py
 
-run-gptsovits:
+run-xtts:
 	docker run --rm \
 		-e TEXT \
+		-e PYTHONPATH=/opt/project \
 		-v "$(PWD):/opt/project" \
 		-w /opt/project \
-		$(IMAGE) python scripts/generate_gptsovits.py
+		$(IMAGE) python scripts/generate_xtts.py
+
+run-vits:
+	docker run --rm \
+		-e TEXT \
+		-e PYTHONPATH=/opt/project \
+		-v "$(PWD):/opt/project" \
+		-w /opt/project \
+		$(IMAGE) python scripts/generate_vits.py
 
 run-all:
 	docker run --rm \
 		-e TEXT \
+		-e PYTHONPATH=/opt/project \
 		-v "$(PWD):/opt/project" \
 		-w /opt/project \
 		$(IMAGE) python scripts/run_all.py
 
 jupyter:
 	docker run -it --rm \
+		-e PYTHONPATH=/opt/project \
 		-p 8888:8888 \
 		-v "$(PWD):/opt/project" \
 		-w /opt/project \
@@ -33,6 +45,7 @@ jupyter:
 
 shell:
 	docker run -it --rm \
+		-e PYTHONPATH=/opt/project \
 		-v "$(PWD):/opt/project" \
 		-w /opt/project \
 		$(IMAGE) /bin/bash

@@ -5,10 +5,14 @@ Utility modules for TTS Zero-Shot Voice Cloning project.
 from .config import (
     PROJECT_ROOT,
     REFERENCE_DIR,
-    GENERATED_COQUI_DIR,
-    GENERATED_GPT_SOVITS_DIR,
+    GENERATED_YOURTTS_DIR,
+    GENERATED_XTTS_DIR,
+    GENERATED_VITS_DIR,
     AUDIO_SAMPLES_DIR,
     SAMPLE_RATE,
+    YOURTTS_MODEL_NAME,
+    XTTS_MODEL_NAME,
+    VITS_MODEL_NAME,
     ensure_directories
 )
 
@@ -24,10 +28,14 @@ __all__ = [
     # Config
     "PROJECT_ROOT",
     "REFERENCE_DIR",
-    "GENERATED_COQUI_DIR",
-    "GENERATED_GPT_SOVITS_DIR",
+    "GENERATED_YOURTTS_DIR",
+    "GENERATED_XTTS_DIR",
+    "GENERATED_VITS_DIR",
     "AUDIO_SAMPLES_DIR",
     "SAMPLE_RATE",
+    "YOURTTS_MODEL_NAME",
+    "XTTS_MODEL_NAME",
+    "VITS_MODEL_NAME",
     "ensure_directories",
     # Audio processing
     "load_audio",

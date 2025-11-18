@@ -1,5 +1,5 @@
 """
-Coqui TTS model wrapper for zero-shot voice cloning.
+YourTTS model wrapper for zero-shot voice cloning (Coqui TTS).
 """
 
 import numpy as np
@@ -11,20 +11,20 @@ from utils import (
     load_audio,
     save_audio,
     SAMPLE_RATE,
-    GENERATED_COQUI_DIR,
-    COQUI_MODEL_NAME
+    GENERATED_YOURTTS_DIR,
+    YOURTTS_MODEL_NAME
 )
 
 
-class CoquiTTS:
-    """Wrapper for Coqui TTS model with voice cloning capabilities."""
+class YourTTS:
+    """Wrapper for YourTTS model with voice cloning capabilities."""
 
     def __init__(self):
-        """Initialize and load Coqui TTS model."""
-        print(f"Loading Coqui TTS model: {COQUI_MODEL_NAME}")
-        self.model = TTS(COQUI_MODEL_NAME)
+        """Initialize and load YourTTS model."""
+        print(f"Loading YourTTS model: {YOURTTS_MODEL_NAME}")
+        self.model = TTS(YOURTTS_MODEL_NAME)
         self.sample_rate = SAMPLE_RATE
-        print("Coqui TTS model loaded successfully")
+        print("YourTTS model loaded successfully")
 
     def _synthesize(self, text: str, reference_audio_path: Path) -> np.ndarray:
         """
@@ -41,7 +41,6 @@ class CoquiTTS:
         reference_audio, _ = load_audio(reference_audio_path)
 
         # Generate speech with voice cloning
-        # Coqui TTS uses speaker_wav parameter for voice cloning
         wav = self.model.tts(
             text=text,
             speaker_wav=str(reference_audio_path),
@@ -63,10 +62,6 @@ class CoquiTTS:
         """
         Generate audio with voice cloning (MAIN FUNCTION).
 
-        Orchestrates the entire generation process:
-        1. Synthesize speech using reference voice
-        2. Save generated audio to file
-
         Args:
             text: Text to convert to speech
             reference_audio_path: Path to reference audio for voice cloning
@@ -79,13 +74,13 @@ class CoquiTTS:
         if output_path is None:
             import datetime
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            output_path = GENERATED_COQUI_DIR / f"coqui_{timestamp}.wav"
+            output_path = GENERATED_YOURTTS_DIR / f"yourtts_{timestamp}.wav"
 
         # Ensure output directory exists
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         # Synthesize speech
-        print(f"Generating speech with Coqui TTS...")
+        print(f"Generating speech with YourTTS...")
         audio = self._synthesize(text, reference_audio_path)
 
         # Save audio using utils

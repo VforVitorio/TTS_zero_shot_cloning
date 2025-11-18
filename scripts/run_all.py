@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 from typing import Dict, Optional
 
-from models import CoquiTTS, GPTSoVITS
+from models import YourTTS, XTTS, VITS
 from utils import (
     ensure_directories,
     REFERENCE_DIR,
@@ -61,15 +61,16 @@ def find_reference_audio(reference_path=None):
             raise FileNotFoundError(f"Reference audio not found: {reference_path}")
         return ref_path
 
-    # Search for first .wav file in REFERENCE_DIR
-    wav_files = list(REFERENCE_DIR.glob("*.wav"))
-    if not wav_files:
+    # Search for audio files in REFERENCE_DIR
+    audio_files = list(REFERENCE_DIR.glob("*.wav")) + list(REFERENCE_DIR.glob("*.mp3"))
+
+    if not audio_files:
         raise FileNotFoundError(
-            f"No .wav files found in {REFERENCE_DIR}. "
-            "Please provide a reference audio file."
+            f"No audio files found in {REFERENCE_DIR}. "
+            "Please provide a .wav or .mp3 file."
         )
 
-    return wav_files[0]
+    return audio_files[0]
 
 
 def calculate_rtf(generation_time, audio_duration):
@@ -88,9 +89,9 @@ def calculate_rtf(generation_time, audio_duration):
     return generation_time / audio_duration
 
 
-def run_coqui_generation(text: str, reference_path: Path) -> Optional[Dict]:
+def run_yourtts_generation(text: str, reference_path: Path) -> Optional[Dict]:
     """
-    Run Coqui TTS generation.
+    Run YourTTS generation.
 
     Args:
         text: Text to synthesize
@@ -101,12 +102,12 @@ def run_coqui_generation(text: str, reference_path: Path) -> Optional[Dict]:
     """
     try:
         print("\n" + "=" * 60)
-        print("Running Coqui TTS")
+        print("Running YourTTS")
         print("=" * 60)
 
         # Initialize model
-        print("Initializing Coqui TTS model...")
-        model = CoquiTTS()
+        print("Initializing YourTTS model...")
+        model = YourTTS()
 
         # Generate audio with timing
         print("Generating speech...")
@@ -120,7 +121,7 @@ def run_coqui_generation(text: str, reference_path: Path) -> Optional[Dict]:
         rtf = calculate_rtf(generation_time, audio_duration)
 
         results = {
-            'model': 'Coqui TTS',
+            'model': 'YourTTS',
             'output_path': str(output_path),
             'audio_duration': audio_duration,
             'generation_time': generation_time,
@@ -128,21 +129,21 @@ def run_coqui_generation(text: str, reference_path: Path) -> Optional[Dict]:
             'success': True
         }
 
-        print(f"✓ Coqui TTS completed in {generation_time:.2f}s (RTF: {rtf:.2f}x)")
+        print(f"✓ YourTTS completed in {generation_time:.2f}s (RTF: {rtf:.2f}x)")
         return results
 
     except Exception as e:
-        print(f"✗ Coqui TTS failed: {str(e)}")
+        print(f"✗ YourTTS failed: {str(e)}")
         return {
-            'model': 'Coqui TTS',
+            'model': 'YourTTS',
             'success': False,
             'error': str(e)
         }
 
 
-def run_gptsovits_generation(text: str, reference_path: Path) -> Optional[Dict]:
+def run_xtts_generation(text: str, reference_path: Path) -> Optional[Dict]:
     """
-    Run GPT-SoVITS generation.
+    Run XTTS v2 generation.
 
     Args:
         text: Text to synthesize
@@ -153,12 +154,12 @@ def run_gptsovits_generation(text: str, reference_path: Path) -> Optional[Dict]:
     """
     try:
         print("\n" + "=" * 60)
-        print("Running GPT-SoVITS")
+        print("Running XTTS v2")
         print("=" * 60)
 
         # Initialize model
-        print("Initializing GPT-SoVITS model...")
-        model = GPTSoVITS()
+        print("Initializing XTTS v2 model...")
+        model = XTTS()
 
         # Generate audio with timing
         print("Generating speech...")
@@ -172,7 +173,7 @@ def run_gptsovits_generation(text: str, reference_path: Path) -> Optional[Dict]:
         rtf = calculate_rtf(generation_time, audio_duration)
 
         results = {
-            'model': 'GPT-SoVITS',
+            'model': 'XTTS v2',
             'output_path': str(output_path),
             'audio_duration': audio_duration,
             'generation_time': generation_time,
@@ -180,21 +181,65 @@ def run_gptsovits_generation(text: str, reference_path: Path) -> Optional[Dict]:
             'success': True
         }
 
-        print(f"✓ GPT-SoVITS completed in {generation_time:.2f}s (RTF: {rtf:.2f}x)")
+        print(f"✓ XTTS v2 completed in {generation_time:.2f}s (RTF: {rtf:.2f}x)")
         return results
 
-    except NotImplementedError as e:
-        print(f"⚠ GPT-SoVITS not implemented: {str(e)}")
-        return {
-            'model': 'GPT-SoVITS',
-            'success': False,
-            'error': 'Not implemented',
-            'note': 'GPT-SoVITS requires additional setup'
-        }
     except Exception as e:
-        print(f"✗ GPT-SoVITS failed: {str(e)}")
+        print(f"✗ XTTS v2 failed: {str(e)}")
         return {
-            'model': 'GPT-SoVITS',
+            'model': 'XTTS v2',
+            'success': False,
+            'error': str(e)
+        }
+
+
+def run_vits_generation(text: str, reference_path: Path) -> Optional[Dict]:
+    """
+    Run VITS generation.
+
+    Args:
+        text: Text to synthesize
+        reference_path: Path to reference audio
+
+    Returns:
+        Dictionary with results or None if failed
+    """
+    try:
+        print("\n" + "=" * 60)
+        print("Running VITS")
+        print("=" * 60)
+
+        # Initialize model
+        print("Initializing VITS model...")
+        model = VITS()
+
+        # Generate audio with timing
+        print("Generating speech...")
+        start_time = time.time()
+        output_path = model.generate(text=text, reference_audio_path=reference_path)
+        generation_time = time.time() - start_time
+
+        # Calculate metrics
+        generated_audio, sr = load_audio(output_path)
+        audio_duration = get_audio_duration(generated_audio, sr)
+        rtf = calculate_rtf(generation_time, audio_duration)
+
+        results = {
+            'model': 'VITS',
+            'output_path': str(output_path),
+            'audio_duration': audio_duration,
+            'generation_time': generation_time,
+            'rtf': rtf,
+            'success': True
+        }
+
+        print(f"✓ VITS completed in {generation_time:.2f}s (RTF: {rtf:.2f}x)")
+        return results
+
+    except Exception as e:
+        print(f"✗ VITS failed: {str(e)}")
+        return {
+            'model': 'VITS',
             'success': False,
             'error': str(e)
         }
@@ -277,15 +322,20 @@ def main():
     # Run all models
     results = []
 
-    # Run Coqui TTS
-    coqui_result = run_coqui_generation(args.text, reference_audio_path)
-    if coqui_result:
-        results.append(coqui_result)
+    # Run YourTTS
+    yourtts_result = run_yourtts_generation(args.text, reference_audio_path)
+    if yourtts_result:
+        results.append(yourtts_result)
 
-    # Run GPT-SoVITS
-    gptsovits_result = run_gptsovits_generation(args.text, reference_audio_path)
-    if gptsovits_result:
-        results.append(gptsovits_result)
+    # Run XTTS v2
+    xtts_result = run_xtts_generation(args.text, reference_audio_path)
+    if xtts_result:
+        results.append(xtts_result)
+
+    # Run VITS
+    vits_result = run_vits_generation(args.text, reference_audio_path)
+    if vits_result:
+        results.append(vits_result)
 
     # Display comparison
     display_comparison(results)
