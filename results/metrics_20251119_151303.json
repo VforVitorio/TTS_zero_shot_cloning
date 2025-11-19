@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-11-19T15:13:03.604635",
+  "text": "Technology has changed the way we live. From smartphones to smart homes, everything is connected. On a rainy afternoon, there's nothing better than curling up with a good book and a cup of hot chocolate. The importance of healthy eating cannot be overstated. A balanced diet fuels our bodies and helps us stay strong. Traveling to a new country opens your mind. You meet different people, taste new food, and learn about their culture.",
+  "reference_audio": "/opt/project/data/reference/audio_recording.mp3",
+  "models": [
+    {
+      "model": "YourTTS",
+      "output_path": "/opt/project/data/generated/yourtts/yourtts_20251119_150721.wav",
+      "audio_duration": 24.548571428571428,
+      "generation_time": 11.09493350982666,
+      "rtf": 0.4519584181144473,
+      "success": true
+    },
+    {
+      "model": "XTTS v2",
+      "output_path": "/opt/project/data/generated/xtts/xtts_20251119_151050.wav",
+      "audio_duration": 27.694875283446713,
+      "generation_time": 132.90841031074524,
+      "rtf": 4.799025413563963,
+      "success": true
+    }
+  ]
+}

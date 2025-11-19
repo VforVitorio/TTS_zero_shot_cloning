@@ -1,0 +1,5 @@
+,rtf,rtf,rtf,rtf,generation_time,generation_time,generation_time,generation_time,audio_duration
+,mean,std,min,max,mean,std,min,max,mean
+model,,,,,,,,,
+XTTS v2,5.05,0.291,4.799,5.47,128.033,22.725,105.344,157.58,25.476
+YourTTS,0.519,0.078,0.452,0.611,10.504,0.738,9.618,11.129,20.754

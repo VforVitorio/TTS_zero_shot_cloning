@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-11-19T15:48:44.634223",
+  "text": "The ocean covers more than seventy percent of our planet's surface. It's home to countless species, from tiny plankton to massive whales. Climate change is affecting marine ecosystems in unprecedented ways. We must act now to protect these vital waters for future generations.",
+  "reference_audio": "/opt/project/data/reference/audio_recording.mp3",
+  "models": [
+    {
+      "model": "YourTTS",
+      "output_path": "/opt/project/data/generated/yourtts/yourtts_20251119_154345.wav",
+      "audio_duration": 15.746031746031745,
+      "generation_time": 9.617949724197388,
+      "rtf": 0.6108173715972132,
+      "success": true
+    },
+    {
+      "model": "XTTS v2",
+      "output_path": "/opt/project/data/generated/xtts/xtts_20251119_154648.wav",
+      "audio_duration": 21.26077097505669,
+      "generation_time": 116.29916262626648,
+      "rtf": 5.470129129499095,
+      "success": true
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-11-19T15:40:46.806802",
+  "text": "Music has the power to transport us to different times and places. A single melody can evoke memories we thought were forgotten. Scientists believe that listening to music reduces stress and improves our mental health. Whether it's classical, jazz, or pop, every genre has its unique way of touching our souls.",
+  "reference_audio": "/opt/project/data/reference/audio_recording.mp3",
+  "models": [
+    {
+      "model": "YourTTS",
+      "output_path": "/opt/project/data/generated/yourtts/yourtts_20251119_153541.wav",
+      "audio_duration": 18.300226757369614,
+      "generation_time": 10.175870180130005,
+      "rtf": 0.556051589690391,
+      "success": true
+    },
+    {
+      "model": "XTTS v2",
+      "output_path": "/opt/project/data/generated/xtts/xtts_20251119_153901.wav",
+      "audio_duration": 21.202721088435375,
+      "generation_time": 105.34406614303589,
+      "rtf": 4.96842201072455,
+      "success": true
+    }
+  ]
+}

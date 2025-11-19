@@ -6,9 +6,29 @@ This project implements and compares different Text-to-Speech (TTS) acoustic mod
 
 The system takes a short reference audio sample and generates synthetic speech saying completely different words, attempting to match the characteristics of the original voice.
 
-Phrase for evaluation:
+## Phrases for Evaluation
 
-_"Technology has changed the way we live. From smartphones to smart homes, everything is connected. On a rainy afternoon, there's nothing better than curling up with a good book and a cup of hot chocolate. The importance of healthy eating cannot be overstated. A balanced diet fuels our bodies and helps us stay strong. Traveling to a new country opens your mind. You meet different people, taste new food, and learn about their culture."_
+The following phrases are used for testing and comparing the TTS models. Each phrase is designed to test different aspects of speech synthesis including varied topics, natural prosody, and sentence complexity.
+
+**Phrase 1 - Technology & Lifestyle:**
+```
+Technology has changed the way we live. From smartphones to smart homes, everything is connected. On a rainy afternoon, there's nothing better than curling up with a good book and a cup of hot chocolate. The importance of healthy eating cannot be overstated. A balanced diet fuels our bodies and helps us stay strong. Traveling to a new country opens your mind. You meet different people, taste new food, and learn about their culture.
+```
+
+**Phrase 2 - Music & Emotions:**
+```
+Music has the power to transport us to different times and places. A single melody can evoke memories we thought were forgotten. Scientists believe that listening to music reduces stress and improves our mental health. Whether it's classical, jazz, or pop, every genre has its unique way of touching our souls.
+```
+
+**Phrase 3 - Environment & Ocean:**
+```
+The ocean covers more than seventy percent of our planet's surface. It's home to countless species, from tiny plankton to massive whales. Climate change is affecting marine ecosystems in unprecedented ways. We must act now to protect these vital waters for future generations.
+```
+
+**Phrase 4 - Learning & Growth:**
+```
+Learning a new skill requires patience and dedication. At first, progress may seem slow and frustrating. But with consistent practice, improvement becomes visible. The journey of mastering something new teaches us valuable lessons about perseverance and self-belief.
+```
 
 ## Objectives
 
