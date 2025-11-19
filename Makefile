@@ -19,14 +19,6 @@ run-xtts:
 		-w /opt/project \
 		$(IMAGE) python scripts/generate_xtts.py
 
-run-vits:
-	docker run --rm \
-		-e TEXT \
-		-e PYTHONPATH=/opt/project \
-		-v "$(PWD):/opt/project" \
-		-w /opt/project \
-		$(IMAGE) python scripts/generate_vits.py
-
 run-all:
 	docker run --rm \
 		-e TEXT \

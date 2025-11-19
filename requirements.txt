@@ -1,6 +1,6 @@
-# PyTorch CPU version
-torch>=2.0.0,<3.0.0
-torchaudio>=2.0.0,<3.0.0
+# PyTorch CPU version - pinned to <2.6.0 to avoid weights_only loading issues with TTS models
+torch>=2.0.0,<2.6.0
+torchaudio>=2.0.0,<2.6.0
 
 # Audio processing libraries
 numpy==1.22.0
@@ -14,10 +14,14 @@ resampy>=0.4.0
 TTS>=0.22.0
 
 
-# GPT-SoVITS dependencies
-transformers>=4.33.0
+# Transformers - specific version for XTTS v2 compatibility
+# XTTS v2 requires BeamSearchScorer which was reorganized in newer versions
+transformers>=4.31.0,<4.35.0
 tokenizers>=0.13.0
 accelerate>=0.20.0
+# huggingface_hub>=0.24.0 required for split_torch_state_dict_into_shards function
+# v0.24.0 includes serialization improvements needed by transformers/accelerate
+huggingface_hub>=0.24.0,<1.0.0
 pydub>=0.25.0
 ffmpeg-python>=0.2.0
 

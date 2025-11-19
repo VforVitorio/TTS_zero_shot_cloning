@@ -2,19 +2,19 @@
 Run all TTS models sequentially and compare results.
 """
 
-import argparse
-import time
-import os
-from pathlib import Path
-from typing import Dict, Optional
-
-from models import YourTTS, XTTS, VITS
 from utils import (
     ensure_directories,
     REFERENCE_DIR,
     get_audio_duration,
     load_audio
 )
+from models import YourTTS, XTTS
+import argparse
+import time
+import os
+import sys
+from pathlib import Path
+from typing import Dict, Optional
 
 
 def parse_args():
@@ -24,7 +24,8 @@ def parse_args():
     )
 
     # Get text from environment variable or argument
-    default_text = os.environ.get('TEXT', 'Hello, this is a test of voice cloning.')
+    default_text = os.environ.get(
+        'TEXT', 'Hello, this is a test of voice cloning.')
 
     parser.add_argument(
         '--text',
@@ -58,11 +59,13 @@ def find_reference_audio(reference_path=None):
     if reference_path:
         ref_path = Path(reference_path)
         if not ref_path.exists():
-            raise FileNotFoundError(f"Reference audio not found: {reference_path}")
+            raise FileNotFoundError(
+                f"Reference audio not found: {reference_path}")
         return ref_path
 
     # Search for audio files in REFERENCE_DIR
-    audio_files = list(REFERENCE_DIR.glob("*.wav")) + list(REFERENCE_DIR.glob("*.mp3"))
+    audio_files = list(REFERENCE_DIR.glob("*.wav")) + \
+        list(REFERENCE_DIR.glob("*.mp3"))
 
     if not audio_files:
         raise FileNotFoundError(
@@ -112,7 +115,8 @@ def run_yourtts_generation(text: str, reference_path: Path) -> Optional[Dict]:
         # Generate audio with timing
         print("Generating speech...")
         start_time = time.time()
-        output_path = model.generate(text=text, reference_audio_path=reference_path)
+        output_path = model.generate(
+            text=text, reference_audio_path=reference_path)
         generation_time = time.time() - start_time
 
         # Calculate metrics
@@ -129,7 +133,8 @@ def run_yourtts_generation(text: str, reference_path: Path) -> Optional[Dict]:
             'success': True
         }
 
-        print(f"✓ YourTTS completed in {generation_time:.2f}s (RTF: {rtf:.2f}x)")
+        print(
+            f"✓ YourTTS completed in {generation_time:.2f}s (RTF: {rtf:.2f}x)")
         return results
 
     except Exception as e:
@@ -164,7 +169,8 @@ def run_xtts_generation(text: str, reference_path: Path) -> Optional[Dict]:
         # Generate audio with timing
         print("Generating speech...")
         start_time = time.time()
-        output_path = model.generate(text=text, reference_audio_path=reference_path)
+        output_path = model.generate(
+            text=text, reference_audio_path=reference_path)
         generation_time = time.time() - start_time
 
         # Calculate metrics
@@ -181,65 +187,14 @@ def run_xtts_generation(text: str, reference_path: Path) -> Optional[Dict]:
             'success': True
         }
 
-        print(f"✓ XTTS v2 completed in {generation_time:.2f}s (RTF: {rtf:.2f}x)")
+        print(
+            f"✓ XTTS v2 completed in {generation_time:.2f}s (RTF: {rtf:.2f}x)")
         return results
 
     except Exception as e:
         print(f"✗ XTTS v2 failed: {str(e)}")
         return {
             'model': 'XTTS v2',
-            'success': False,
-            'error': str(e)
-        }
-
-
-def run_vits_generation(text: str, reference_path: Path) -> Optional[Dict]:
-    """
-    Run VITS generation.
-
-    Args:
-        text: Text to synthesize
-        reference_path: Path to reference audio
-
-    Returns:
-        Dictionary with results or None if failed
-    """
-    try:
-        print("\n" + "=" * 60)
-        print("Running VITS")
-        print("=" * 60)
-
-        # Initialize model
-        print("Initializing VITS model...")
-        model = VITS()
-
-        # Generate audio with timing
-        print("Generating speech...")
-        start_time = time.time()
-        output_path = model.generate(text=text, reference_audio_path=reference_path)
-        generation_time = time.time() - start_time
-
-        # Calculate metrics
-        generated_audio, sr = load_audio(output_path)
-        audio_duration = get_audio_duration(generated_audio, sr)
-        rtf = calculate_rtf(generation_time, audio_duration)
-
-        results = {
-            'model': 'VITS',
-            'output_path': str(output_path),
-            'audio_duration': audio_duration,
-            'generation_time': generation_time,
-            'rtf': rtf,
-            'success': True
-        }
-
-        print(f"✓ VITS completed in {generation_time:.2f}s (RTF: {rtf:.2f}x)")
-        return results
-
-    except Exception as e:
-        print(f"✗ VITS failed: {str(e)}")
-        return {
-            'model': 'VITS',
             'success': False,
             'error': str(e)
         }
@@ -277,7 +232,8 @@ def display_comparison(results: list):
         if len(successful) > 1:
             fastest = min(successful, key=lambda x: x['rtf'])
             print("-" * 60)
-            print(f"Fastest model: {fastest['model']} (RTF: {fastest['rtf']:.2f}x)")
+            print(
+                f"Fastest model: {fastest['model']} (RTF: {fastest['rtf']:.2f}x)")
 
     if failed:
         print("\nFailed generations:")
@@ -331,11 +287,6 @@ def main():
     xtts_result = run_xtts_generation(args.text, reference_audio_path)
     if xtts_result:
         results.append(xtts_result)
-
-    # Run VITS
-    vits_result = run_vits_generation(args.text, reference_audio_path)
-    if vits_result:
-        results.append(vits_result)
 
     # Display comparison
     display_comparison(results)

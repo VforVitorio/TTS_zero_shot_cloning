@@ -6,6 +6,10 @@ This project implements and compares different Text-to-Speech (TTS) acoustic mod
 
 The system takes a short reference audio sample and generates synthetic speech saying completely different words, attempting to match the characteristics of the original voice.
 
+Phrase for evaluation:
+
+_"Technology has changed the way we live. From smartphones to smart homes, everything is connected. On a rainy afternoon, there's nothing better than curling up with a good book and a cup of hot chocolate. The importance of healthy eating cannot be overstated. A balanced diet fuels our bodies and helps us stay strong. Traveling to a new country opens your mind. You meet different people, taste new food, and learn about their culture."_
+
 ## Objectives
 
 - Implement at least 2 different TTS acoustic models with zero-shot voice cloning capabilities
@@ -16,7 +20,7 @@ The system takes a short reference audio sample and generates synthetic speech s
 
 ## Models Implemented
 
-This project implements **3 different Coqui TTS models** for comparison:
+This project implements **2 different Coqui TTS models** for comparison:
 
 ### 1. YourTTS
 
@@ -35,15 +39,6 @@ This project implements **3 different Coqui TTS models** for comparison:
 - **Use case**: High-fidelity voice synthesis
 - **⚠️ LICENSE REQUIREMENT**: See section below
 
-### 3. VITS
-
-- **Type**: Variational Inference TTS
-- **Architecture**: End-to-end VITS model
-- **Model**: `tts_models/en/vctk/vits`
-- **Advantages**: Lightweight, fast inference
-- **Use case**: Fast generation with decent quality
-- **⚠️ SYSTEM REQUIREMENT**: Requires `espeak-ng` (included in Dockerfile)
-
 ## Important License Information
 
 ### XTTS v2 License (CPML)
@@ -53,6 +48,7 @@ This project implements **3 different Coqui TTS models** for comparison:
 This project automatically accepts the **non-commercial license** by setting the `COQUI_TOS_AGREED` environment variable in the code. This is necessary because XTTS v2 normally requires interactive license acceptance, which doesn't work in Docker containers.
 
 **License details:**
+
 - **Non-commercial use**: Covered by CPML license (https://coqui.ai/cpml) - **automatically accepted by this project**
 - **Commercial use**: Requires purchasing a commercial license from Coqui (licensing@coqui.ai)
 
@@ -60,32 +56,15 @@ This project automatically accepts the **non-commercial license** by setting the
 When running XTTS v2 in Docker without TTY, the model tries to ask for license confirmation interactively, causing an "EOF when reading a line" error. Our implementation bypasses this by programmatically accepting the non-commercial terms.
 
 **Implementation location:**
+
 - File: `models/xtts_model.py`
 - Line: `os.environ['COQUI_TOS_AGREED'] = '1'`
 
 If you need commercial use, you must:
+
 1. Purchase a license from licensing@coqui.ai
 2. Remove or modify the automatic acceptance in the code
 3. Follow Coqui's commercial licensing terms
-
-## System Requirements
-
-### VITS Model - espeak-ng Dependency
-
-The VITS model requires **espeak-ng** for text phonemization (converting text to phonemes).
-
-**Why this is needed:**
-VITS uses phoneme-based synthesis, which requires a phonemization backend. Without `espeak-ng`, you'll get the error:
-```
-[!] No espeak backend found. Install espeak-ng or espeak to your system.
-```
-
-**Solution:**
-The Dockerfile automatically installs `espeak-ng` as part of the system dependencies. No manual action required.
-
-**Implementation location:**
-- File: `Dockerfile`
-- Line: `espeak-ng \` in the apt-get install command
 
 ## Project Structure
 
@@ -97,14 +76,12 @@ TTS_zero_shot_cloning/
 │   │   └── .gitkeep
 │   └── generated/              # Generated audio outputs
 │       ├── yourtts/            # YourTTS generated audio
-│       ├── xtts/               # XTTS v2 generated audio
-│       └── vits/               # VITS generated audio
+│       └── xtts/               # XTTS v2 generated audio
 │
 ├── models/                     # Model wrapper implementations
 │   ├── __init__.py
 │   ├── yourtts_model.py        # YourTTS wrapper
-│   ├── xtts_model.py           # XTTS v2 wrapper (with license handling)
-│   └── vits_model.py           # VITS wrapper
+│   └── xtts_model.py           # XTTS v2 wrapper (with license handling)
 │
 ├── evaluation/                 # Evaluation notebooks and scripts
 │   └── evaluation.ipynb        # Metrics calculation and analysis
@@ -117,7 +94,6 @@ TTS_zero_shot_cloning/
 ├── scripts/                    # Main execution scripts
 │   ├── generate_yourtts.py     # Generate with YourTTS
 │   ├── generate_xtts.py        # Generate with XTTS v2
-│   ├── generate_vits.py        # Generate with VITS
 │   └── run_all.py              # Run all models sequentially
 │
 ├── results/                    # Evaluation results
@@ -127,7 +103,7 @@ TTS_zero_shot_cloning/
 ├── docs/
 │   └── memoria.pdf             # Technical report (Spanish)
 │
-├── Dockerfile                  # Docker image definition (includes espeak-ng)
+├── Dockerfile                  # Docker image definition
 ├── Makefile                    # Build and execution recipes
 ├── requirements.txt            # Python dependencies
 ├── .dockerignore               # Docker ignore patterns
@@ -152,9 +128,10 @@ make build
 ```
 
 This will:
-- Install system dependencies (ffmpeg, espeak-ng, etc.)
+
+- Install system dependencies (ffmpeg, etc.)
 - Install Python dependencies
-- Set up the environment for all 3 models
+- Set up the environment for both models
 
 ### Generating Audio Samples
 
@@ -170,13 +147,7 @@ Generate audio with XTTS v2:
 make run-xtts TEXT="Hello, this is a test of voice cloning"
 ```
 
-Generate audio with VITS:
-
-```bash
-make run-vits TEXT="Hello, this is a test of voice cloning"
-```
-
-Run all models at once and compare:
+Run both models at once and compare:
 
 ```bash
 make run-all TEXT="Hello, this is a test of voice cloning"
@@ -197,8 +168,7 @@ Then navigate to `evaluation/evaluation.ipynb` in your browser.
 - `make build` - Build Docker image
 - `make run-yourtts` - Run YourTTS model
 - `make run-xtts` - Run XTTS v2 model
-- `make run-vits` - Run VITS model
-- `make run-all` - Run all models sequentially and compare results
+- `make run-all` - Run both models sequentially and compare results
 - `make jupyter` - Start Jupyter notebook server for evaluation
 - `make shell` - Open interactive shell in container
 - `make clean` - Remove Docker image
@@ -212,6 +182,7 @@ Este proyecto evalúa los modelos TTS usando 3 métricas objetivas principales:
 Mide qué tan similar suena la voz generada respecto a la voz de referencia.
 
 **Herramientas:**
+
 - **Resemblyzer**: Extrae embeddings de voz usando GE2E (Generalized End-to-End)
 - **SpeechBrain ECAPA-TDNN**: Speaker verification embeddings de alta precisión
 
@@ -220,6 +191,7 @@ Mide qué tan similar suena la voz generada respecto a la voz de referencia.
 **Rango:** 0-1 (más cercano a 1 = mayor similitud de voz)
 
 **Interpretación:**
+
 - `>0.8`: Excelente similitud
 - `0.6-0.8`: Buena similitud
 - `<0.6`: Similitud pobre
@@ -229,6 +201,7 @@ Mide qué tan similar suena la voz generada respecto a la voz de referencia.
 Evalúa la calidad perceptual y técnica del audio generado.
 
 **Herramientas:**
+
 - **PESQ** (Perceptual Evaluation of Speech Quality): Calidad perceptual de voz
 - **STOI** (Short-Time Objective Intelligibility): Inteligibilidad del habla
 
@@ -236,6 +209,7 @@ Evalúa la calidad perceptual y técnica del audio generado.
 **Rango STOI:** 0-1 (más alto = mayor inteligibilidad)
 
 **Métricas adicionales:**
+
 - Signal-to-Noise Ratio (SNR)
 - Análisis espectral
 
@@ -248,6 +222,7 @@ Mide la velocidad de generación del modelo.
 **Cálculo:** `RTF = tiempo_generación / duración_audio`
 
 **Interpretación:**
+
 - `RTF < 1`: Más rápido que tiempo real (ideal)
 - `RTF = 1`: Tiempo real
 - `RTF > 1`: Más lento que tiempo real
@@ -295,24 +270,16 @@ A comprehensive technical report (memoria) is included in `docs/memoria.pdf` cov
 
 If you see this error, verify that the environment variable is being set correctly in the model initialization.
 
-### VITS: "No espeak backend found" error
-
-**Cause:** VITS requires `espeak-ng` for phonemization.
-
-**Solution:** Rebuild the Docker image with `make build`. The Dockerfile includes `espeak-ng` installation.
-
-If the error persists, verify that `espeak-ng` is in the Dockerfile's apt-get install list.
-
 ## License
 
 This project is for academic purposes only.
 
 **Model licenses:**
+
 - **YourTTS**: Mozilla Public License 2.0 (Coqui TTS)
 - **XTTS v2**: Coqui Public Model License (CPML) - Non-commercial use only
   - Commercial use requires purchasing a license from licensing@coqui.ai
   - This project automatically accepts non-commercial terms
-- **VITS**: Mozilla Public License 2.0 (Coqui TTS)
 
 **Reference audio:** Licensed under CC0 (Public Domain) by buggly via Freesound.org.
 
@@ -325,9 +292,8 @@ Practice 3: Zero-Shot Voice Cloning
 ## Acknowledgments
 
 - Coqui TTS community for the open-source TTS framework
-- Coqui AI team for developing YourTTS, XTTS v2, and VITS models
+- Coqui AI team for developing YourTTS and XTTS v2 models
 - buggly (Freesound.org) for providing the reference audio under CC0 license
-- espeak-ng developers for the phonemization backend
 
 ---
 
