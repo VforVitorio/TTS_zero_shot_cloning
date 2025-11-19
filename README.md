@@ -11,21 +11,25 @@ The system takes a short reference audio sample and generates synthetic speech s
 The following phrases are used for testing and comparing the TTS models. Each phrase is designed to test different aspects of speech synthesis including varied topics, natural prosody, and sentence complexity.
 
 **Phrase 1 - Technology & Lifestyle:**
+
 ```
 Technology has changed the way we live. From smartphones to smart homes, everything is connected. On a rainy afternoon, there's nothing better than curling up with a good book and a cup of hot chocolate. The importance of healthy eating cannot be overstated. A balanced diet fuels our bodies and helps us stay strong. Traveling to a new country opens your mind. You meet different people, taste new food, and learn about their culture.
 ```
 
 **Phrase 2 - Music & Emotions:**
+
 ```
 Music has the power to transport us to different times and places. A single melody can evoke memories we thought were forgotten. Scientists believe that listening to music reduces stress and improves our mental health. Whether it's classical, jazz, or pop, every genre has its unique way of touching our souls.
 ```
 
 **Phrase 3 - Environment & Ocean:**
+
 ```
 The ocean covers more than seventy percent of our planet's surface. It's home to countless species, from tiny plankton to massive whales. Climate change is affecting marine ecosystems in unprecedented ways. We must act now to protect these vital waters for future generations.
 ```
 
 **Phrase 4 - Learning & Growth:**
+
 ```
 Learning a new skill requires patience and dedication. At first, progress may seem slow and frustrating. But with consistent practice, improvement becomes visible. The journey of mastering something new teaches us valuable lessons about perseverance and self-belief.
 ```
@@ -58,33 +62,6 @@ This project implements **2 different Coqui TTS models** for comparison:
 - **Advantages**: High-quality voice cloning, excellent prosody
 - **Use case**: High-fidelity voice synthesis
 - **⚠️ LICENSE REQUIREMENT**: See section below
-
-## Important License Information
-
-### XTTS v2 License (CPML)
-
-**XTTS v2 requires accepting Coqui's CPML (Coqui Public Model License) terms.**
-
-This project automatically accepts the **non-commercial license** by setting the `COQUI_TOS_AGREED` environment variable in the code. This is necessary because XTTS v2 normally requires interactive license acceptance, which doesn't work in Docker containers.
-
-**License details:**
-
-- **Non-commercial use**: Covered by CPML license (https://coqui.ai/cpml) - **automatically accepted by this project**
-- **Commercial use**: Requires purchasing a commercial license from Coqui (licensing@coqui.ai)
-
-**Why this is needed:**
-When running XTTS v2 in Docker without TTY, the model tries to ask for license confirmation interactively, causing an "EOF when reading a line" error. Our implementation bypasses this by programmatically accepting the non-commercial terms.
-
-**Implementation location:**
-
-- File: `models/xtts_model.py`
-- Line: `os.environ['COQUI_TOS_AGREED'] = '1'`
-
-If you need commercial use, you must:
-
-1. Purchase a license from licensing@coqui.ai
-2. Remove or modify the automatic acceptance in the code
-3. Follow Coqui's commercial licensing terms
 
 ## Project Structure
 
@@ -195,66 +172,66 @@ Then navigate to `evaluation/evaluation.ipynb` in your browser.
 
 ## Evaluation Metrics
 
-Este proyecto evalúa los modelos TTS usando 3 métricas objetivas principales:
+This project evaluates TTS models using 3 main objective metrics:
 
-### 1. Speaker Similarity (Similitud del Hablante) ⭐ PRINCIPAL
+### 1. Speaker Similarity ⭐ PRIMARY
 
-Mide qué tan similar suena la voz generada respecto a la voz de referencia.
+Measures how similar the generated voice sounds compared to the reference voice.
 
-**Herramientas:**
+**Tools:**
 
-- **Resemblyzer**: Extrae embeddings de voz usando GE2E (Generalized End-to-End)
-- **SpeechBrain ECAPA-TDNN**: Speaker verification embeddings de alta precisión
+- **Resemblyzer**: Extracts voice embeddings using GE2E (Generalized End-to-End)
+- **SpeechBrain ECAPA-TDNN**: High-precision speaker verification embeddings
 
-**Métrica:** Cosine similarity entre embeddings del audio de referencia vs audio generado
+**Metric:** Cosine similarity between reference audio embeddings vs generated audio
 
-**Rango:** 0-1 (más cercano a 1 = mayor similitud de voz)
+**Range:** 0-1 (closer to 1 = higher voice similarity)
 
-**Interpretación:**
+**Interpretation:**
 
-- `>0.8`: Excelente similitud
-- `0.6-0.8`: Buena similitud
-- `<0.6`: Similitud pobre
+- `>0.8`: Excellent similarity
+- `0.6-0.8`: Good similarity
+- `<0.6`: Poor similarity
 
-### 2. Audio Quality (Calidad de Audio)
+### 2. Audio Quality
 
-Evalúa la calidad perceptual y técnica del audio generado.
+Evaluates the perceptual and technical quality of generated audio.
 
-**Herramientas:**
+**Tools:**
 
-- **PESQ** (Perceptual Evaluation of Speech Quality): Calidad perceptual de voz
-- **STOI** (Short-Time Objective Intelligibility): Inteligibilidad del habla
+- **PESQ** (Perceptual Evaluation of Speech Quality): Perceptual voice quality
+- **STOI** (Short-Time Objective Intelligibility): Speech intelligibility
 
-**Rango PESQ:** -0.5 a 4.5 (más alto = mejor calidad)
-**Rango STOI:** 0-1 (más alto = mayor inteligibilidad)
+**PESQ Range:** -0.5 to 4.5 (higher = better quality)
+**STOI Range:** 0-1 (higher = better intelligibility)
 
-**Métricas adicionales:**
+**Additional Metrics:**
 
 - Signal-to-Noise Ratio (SNR)
-- Análisis espectral
+- Spectral analysis
 
-### 3. Inference Time (Tiempo de Inferencia)
+### 3. Inference Time
 
-Mide la velocidad de generación del modelo.
+Measures the model's generation speed.
 
-**Métrica:** Tiempo de generación por segundo de audio (RTF - Real-Time Factor)
+**Metric:** Generation time per second of audio (RTF - Real-Time Factor)
 
-**Cálculo:** `RTF = tiempo_generación / duración_audio`
+**Calculation:** `RTF = generation_time / audio_duration`
 
-**Interpretación:**
+**Interpretation:**
 
-- `RTF < 1`: Más rápido que tiempo real (ideal)
-- `RTF = 1`: Tiempo real
-- `RTF > 1`: Más lento que tiempo real
+- `RTF < 1`: Faster than real-time (ideal)
+- `RTF = 1`: Real-time
+- `RTF > 1`: Slower than real-time
 
-**Ejemplo:** RTF = 0.5 significa que genera 1 segundo de audio en 0.5 segundos
+**Example:** RTF = 0.5 means it generates 1 second of audio in 0.5 seconds
 
 ---
 
-### Evaluación Subjetiva (Opcional)
+### Subjective Evaluation (Optional)
 
-- **MOS** (Mean Opinion Score): Evaluación humana de naturalidad (escala 1-5)
-- **Prosody**: Entonación, ritmo y patrones de énfasis
+- **MOS** (Mean Opinion Score): Human evaluation of naturalness (scale 1-5)
+- **Prosody**: Intonation, rhythm, and emphasis patterns
 
 ## Reference Audio
 
@@ -268,53 +245,5 @@ The reference audio used in this project is:
 - **Language**: English
 - **Original Format**: WAV/MP3 (both supported)
 - **Processing**: Resampled to 22050 Hz if necessary for model compatibility
-
-## Technical Report
-
-A comprehensive technical report (memoria) is included in `docs/memoria.pdf` covering:
-
-- Model selection rationale
-- Implementation details and configurations tested
-- Quantitative results with at least 2 metrics
-- Qualitative analysis and subjective impressions
-- Performance comparison (quality, speed, computational requirements)
-- Conclusions and recommendations
-
-## Troubleshooting
-
-### XTTS v2: "EOF when reading a line" error
-
-**Cause:** XTTS v2 requires accepting license terms interactively, which fails in Docker.
-
-**Solution:** The code automatically accepts the non-commercial CPML license by setting `COQUI_TOS_AGREED=1`. This is implemented in `models/xtts_model.py`.
-
-If you see this error, verify that the environment variable is being set correctly in the model initialization.
-
-## License
-
-This project is for academic purposes only.
-
-**Model licenses:**
-
-- **YourTTS**: Mozilla Public License 2.0 (Coqui TTS)
-- **XTTS v2**: Coqui Public Model License (CPML) - Non-commercial use only
-  - Commercial use requires purchasing a license from licensing@coqui.ai
-  - This project automatically accepts non-commercial terms
-
-**Reference audio:** Licensed under CC0 (Public Domain) by buggly via Freesound.org.
-
-## Author
-
-**Víctor** - Interactive Intelligent Systems Course
-Universidad Intercontinental de la Empresa (UIE)
-Practice 3: Zero-Shot Voice Cloning
-
-## Acknowledgments
-
-- Coqui TTS community for the open-source TTS framework
-- Coqui AI team for developing YourTTS and XTTS v2 models
-- buggly (Freesound.org) for providing the reference audio under CC0 license
-
----
 
 **Note**: This project implements zero-shot voice cloning without any fine-tuning or model training, focusing on the comparison and evaluation of pre-trained acoustic models. All inference runs on CPU.
