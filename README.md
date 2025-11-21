@@ -76,7 +76,6 @@ TTS_zero_shot_cloning/
 │
 ├── data/
 │   ├── reference/              # Original reference audio
-│   │   └── .gitkeep
 │   └── generated/              # Generated audio outputs
 │       ├── yourtts/            # YourTTS generated audio
 │       └── xtts/               # XTTS v2 generated audio
@@ -100,18 +99,107 @@ TTS_zero_shot_cloning/
 │   └── run_all.py              # Run all models sequentially
 │
 ├── results/                    # Evaluation results
-│   ├── metrics_results.json    # Quantitative metrics
+│   ├── metrics_*.json          # Quantitative metrics with timestamps
 │   └── audio_samples/          # Sample outputs for comparison
-│
-├── docs/
-│   └── memoria.pdf             # Technical report (Spanish)
 │
 ├── Dockerfile                  # Docker image definition
 ├── Makefile                    # Build and execution recipes
 ├── requirements.txt            # Python dependencies
-├── .dockerignore               # Docker ignore patterns
 └── README.md                   # This file
 ```
+
+## System Architecture
+
+This project follows a modular **5-layer architecture** based on the single responsibility principle, making it easy to extend with new TTS models without modifying existing components.
+
+```mermaid
+graph TB
+    subgraph "Layer 1: User Interface"
+        A[Makefile]
+        B[Docker Environment]
+        A -->|Simplified commands| B
+    end
+
+    subgraph "Layer 2: Execution"
+        C[run_all.py]
+        D[generate_yourtts.py]
+        E[generate_xtts.py]
+        C -->|Orchestrates| D
+        C -->|Orchestrates| E
+    end
+
+    subgraph "Layer 3: TTS Models"
+        F[yourtts_model.py]
+        G[xtts_model.py]
+        H[Wrapper Interface]
+        F -.->|Implements| H
+        G -.->|Implements| H
+    end
+
+    subgraph "Layer 4: Utilities"
+        I[config.py]
+        J[audio_processing.py]
+        I -->|Constants & paths| J
+        J -->|Load/Save/Normalize| I
+    end
+
+    subgraph "Layer 5: Data & Evaluation"
+        K[(data/reference/)]
+        L[(data/generated/yourtts/)]
+        M[(data/generated/xtts/)]
+        N[evaluation.ipynb]
+        O[(results/*.json)]
+    end
+
+    B -->|Executes| C
+    B -->|Executes| D
+    B -->|Executes| E
+    
+    D -->|Initializes| F
+    E -->|Initializes| G
+    
+    F -->|Uses| J
+    G -->|Uses| J
+    
+    D -->|Reads| K
+    E -->|Reads| K
+    
+    F -->|Writes| L
+    G -->|Writes| M
+    
+    D -->|Saves metrics| O
+    E -->|Saves metrics| O
+    C -->|Saves comparison| O
+    
+    N -->|Reads audio| L
+    N -->|Reads audio| M
+    N -->|Reads reference| K
+    N -->|Reads results| O
+
+    style A fill:#e1f5ff
+    style B fill:#e1f5ff
+    style C fill:#fff4e1
+    style D fill:#fff4e1
+    style E fill:#fff4e1
+    style F fill:#f0e1ff
+    style G fill:#f0e1ff
+    style H fill:#f0e1ff
+    style I fill:#e1ffe1
+    style J fill:#e1ffe1
+    style K fill:#ffe1e1
+    style L fill:#ffe1e1
+    style M fill:#ffe1e1
+    style N fill:#ffe1e1
+    style O fill:#ffe1e1
+```
+
+### Architecture Layers:
+
+1. **User Interface Layer (Blue)**: Makefile provides simplified access with Docker commands, ensuring reproducibility across different operating systems
+2. **Execution Layer (Yellow)**: Scripts orchestrate the complete flow from input to generation, handling argument parsing, model initialization, and performance metrics
+3. **Models Layer (Purple)**: Wrappers encapsulate each TTS model with consistent interfaces, allowing interchangeable usage
+4. **Utilities Layer (Green)**: Centralizes shared logic for configuration, audio processing, normalization, and analysis
+5. **Data & Evaluation Layer (Red)**: Manages strict separation between reference audio and generated outputs, with timestamped results serialized to JSON
 
 ## Requirements
 
